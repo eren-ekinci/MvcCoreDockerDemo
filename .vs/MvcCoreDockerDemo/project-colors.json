@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "16beb32a-f858-4a6a-9183-2d8a9231c2e0": {
+      "ProjectGuid": "16beb32a-f858-4a6a-9183-2d8a9231c2e0",
+      "DisplayName": "MvcCoreDockerDemo",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
