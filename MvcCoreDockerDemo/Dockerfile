@@ -7,7 +7,7 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["./MvcCoreDockerDemo.csproj", "MvcCoreDockerDemo/"]
-RUN dotnet restore "MvcCoreDockerDemo/MvcCoreDockerDemo.csproj"
+RUN dotnet restore "MvcCoreDockerDemo.csproj"
 COPY . .
 WORKDIR "/src/MvcCoreDockerDemo"
 RUN dotnet build "MvcCoreDockerDemo.csproj" -c Release -o /app/build
