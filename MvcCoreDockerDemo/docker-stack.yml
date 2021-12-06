@@ -2,7 +2,7 @@
 services:
 
   docker-demo:
-    build: .
+    image: i_demo
     deploy:
       replicas: 6
       update_config:
