@@ -1,18 +1,26 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-WORKDIR /source
-
-# copy csproj and restore as distinct layers
-COPY *.sln .
-COPY *.csproj ./aspnetapp/
-RUN dotnet restore
-
-# copy everything else and build app
-COPY . ./aspnetapp/
-WORKDIR /source/aspnetapp
-RUN dotnet publish -c release -o /app --no-restore
-
-# final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:5.0
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-focal AS base
 WORKDIR /app
-COPY --from=build /app ./
+EXPOSE 5000
+
+ENV ASPNETCORE_URLS=http://+:5000
+
+# Creates a non-root user with an explicit UID and adds permission to access the /app folder
+# For more info, please refer to https://aka.ms/vscode-docker-dotnet-configure-containers
+RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+USER appuser
+
+FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build
+WORKDIR /src
+COPY ["MvcCoreDockerDemo/MvcCoreDockerDemo.csproj", "MvcCoreDockerDemo/"]
+RUN dotnet restore "MvcCoreDockerDemo/MvcCoreDockerDemo.csproj"
+COPY . .
+WORKDIR "/src/MvcCoreDockerDemo"
+RUN dotnet build "MvcCoreDockerDemo.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "MvcCoreDockerDemo.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "MvcCoreDockerDemo.dll"]
