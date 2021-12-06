@@ -2,9 +2,7 @@
 services:
 
   docker-demo:
-    build:
-        context: .
-        Dockerfile: ./Dockerfile
+    build: .
     deploy:
       replicas: 6
       update_config:
