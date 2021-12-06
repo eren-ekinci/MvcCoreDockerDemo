@@ -3,6 +3,8 @@ services:
 
   docker-demo:
     image: i_demo
+    ports:
+        - 5000:5000
     deploy:
       replicas: 6
       update_config:
